@@ -19,7 +19,9 @@ return new class extends Migration
             $table->decimal('longitude', 10, 7);
             $table->decimal('precisao', 10, 2)->nullable();
             $table->text('descricao')->nullable();
-            $table->timestamp('data_registro')->useCurrent();
+
+            // Cria as colunas created_at e updated_at
+            $table->timestamps();
         });
     }
 
