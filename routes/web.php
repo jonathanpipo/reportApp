@@ -7,3 +7,5 @@ Route::get('/', function () {
 });
 
 Route::get('/home', \App\Http\Livewire\Home::class)->name("Home");
+
+Route::get('/data-maps', \App\Http\Livewire\DataMaps::class)->name('data.maps');
