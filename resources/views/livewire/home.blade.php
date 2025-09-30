@@ -3,12 +3,12 @@
     <h1 class="text-xl font-bold text-center mb-4">Adicionar Marcador</h1>
 
     <!-- Espaço reservado para o mapa -->
-    <div id="map" class="w-full h-64 rounded-md border mb-4">
+    <div id="map" wire:ignore class="w-full h-64 rounded-md border mb-4">
         <!-- O mapa Leaflet será renderizado aqui -->
     </div>
 
     <!-- Formulário Livewire -->
-    <form wire:submit.prevent="createReporte" wire:ignore class="flex flex-col gap-4">
+    <form wire:submit.prevent="createReporte" class="flex flex-col gap-4">
 
         <!-- Select 1 -->
         <div>
