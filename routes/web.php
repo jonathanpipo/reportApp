@@ -8,4 +8,6 @@ Route::get('/', function () {
 
 Route::get('/home', \App\Http\Livewire\Home::class)->name("Home");
 
-Route::get('/data-maps', \App\Http\Livewire\DataMaps::class)->name('data.maps');
+Route::get('/heat-map', \App\Http\Livewire\HeatMap::class)->name('heat.map');
+
+Route::get('/clustering-map', \App\Http\Livewire\ClusteringMap::class)->name('clustering.map');
