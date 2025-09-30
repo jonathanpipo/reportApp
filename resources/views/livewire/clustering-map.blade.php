@@ -24,11 +24,8 @@ const bounds = L.latLngBounds(
 map.setMaxBounds(bounds);
 map.options.maxBoundsViscosity = 1.0;
 
-//======INFRAESTRUTURA==========
-// pega os dados do Livewire (injetados no Blade)
+//====== INFRAESTRUTURA ==========
 const reportesInfraestrutura = @json($clusterReportesInfraestrutura);
-
-// cria o grupo de clusters
 const markersInfraestrutura = L.markerClusterGroup();
 
 reportesInfraestrutura.forEach(r => {
@@ -39,14 +36,8 @@ reportesInfraestrutura.forEach(r => {
     }
 });
 
-// adiciona os clusters ao mapa
-//markersInfraestrutura.addTo(map);
-
-//======SITUAÇÃO==========
-// pega os dados do Livewire (injetados no Blade)
+//====== SITUAÇÃO ==========
 const reportesSituacao = @json($clusterReportesSituacao);
-
-// cria o grupo de clusters
 const markersSituacao = L.markerClusterGroup();
 
 reportesSituacao.forEach(r => {
@@ -57,14 +48,8 @@ reportesSituacao.forEach(r => {
     }
 });
 
-// adiciona os clusters ao mapa
-//markersSituacao.addTo(map);
-
-//======SINALIZAÇÃO==========
-// pega os dados do Livewire (injetados no Blade)
+//====== SINALIZAÇÃO ==========
 const reportesSinalizacao = @json($clusterReportesSinalizacao);
-
-// cria o grupo de clusters
 const markersSinalizacao = L.markerClusterGroup();
 
 reportesSinalizacao.forEach(r => {
@@ -75,6 +60,12 @@ reportesSinalizacao.forEach(r => {
     }
 });
 
-// adiciona os clusters ao mapa
-//markersSinalizacao.addTo(map);
+// === adicionando controle de camadas ===
+const overlays = {
+    "Infraestrutura": markersInfraestrutura,
+    "Situação": markersSituacao,
+    "Sinalização": markersSinalizacao
+};
+
+L.control.layers(null, overlays, { collapsed: false }).addTo(map);
 </script>
