@@ -49,7 +49,7 @@
 </head>
 
 <body class=" font-poppins overflow-x-hidden">
-    
+    <livewire:header />
 
     {{ $slot }}
     @livewireScripts
