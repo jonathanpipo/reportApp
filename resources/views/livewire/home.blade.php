@@ -57,7 +57,7 @@
     }).addTo(map);
 
     const bounds = L.latLngBounds(
-        [-22.95, -48.52], 
+        [-22.95, -48.52],
         [-22.82, -48.36]
     );
 
@@ -66,17 +66,80 @@
 
     let currentMarker = null;
 
+    // Geocoder
+    const geocoder = L.Control.geocoder({
+        defaultMarkGeocode: false,
+        geocoder: L.Control.Geocoder.nominatim({
+            geocodingQueryParams: {
+                countrycodes: 'br',
+                viewbox: "-48.52,-22.95,-48.36,-22.82",
+                bounded: 1
+            }
+        })
+    })
+    .on('markgeocode', function(e) {
+        if (currentMarker) map.removeLayer(currentMarker);
+
+        currentMarker = L.marker(e.geocode.center).addTo(map)
+            .bindPopup(e.geocode.name)
+            .openPopup();
+
+        map.setView(e.geocode.center, 15);
+
+        @this.set('latitude', e.geocode.center.lat);
+        @this.set('longitude', e.geocode.center.lng);
+    })
+    .addTo(map);
+
+    // Clique no mapa adiciona marcador
     map.on("click", function(e) {
-        if (currentMarker) {
-            map.removeLayer(currentMarker);
-        }
+        if (currentMarker) map.removeLayer(currentMarker);
 
         currentMarker = L.marker(e.latlng).addTo(map);
 
-        // Atualiza propriedades Livewire
         @this.set('latitude', e.latlng.lat);
         @this.set('longitude', e.latlng.lng);
     });
+
+    // Botão nativo de "minha localização"
+    const locateControl = L.control({position: 'topleft'});
+    locateControl.onAdd = function(map) {
+        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+
+        const button = L.DomUtil.create('a', '', container);
+        button.innerHTML = '📍';
+        button.href = '#';
+        button.title = "Minha localização";
+
+        L.DomEvent.on(button, 'click', function(e) {
+            L.DomEvent.stopPropagation(e);
+            L.DomEvent.preventDefault(e);
+
+            map.locate({setView: true, maxZoom: 16});
+        });
+
+        return container;
+    };
+    locateControl.addTo(map);
+
+    // Quando localização encontrada
+    map.on('locationfound', function(e) {
+        if (currentMarker) map.removeLayer(currentMarker);
+
+        currentMarker = L.marker(e.latlng).addTo(map)
+            .bindPopup("Você está aqui!")
+            .openPopup();
+
+        @this.set('latitude', e.latlng.lat);
+        @this.set('longitude', e.latlng.lng);
+    });
+
+    // Se não conseguir localizar
+    map.on('locationerror', function(e) {
+        alert("Não foi possível obter sua localização.");
+    });
 </script>
+
+
 
 
