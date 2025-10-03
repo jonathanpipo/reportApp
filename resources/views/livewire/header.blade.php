@@ -4,7 +4,7 @@
             <a href="{{ route('Home') }}" class="hover:text-gray-300 flex flex-1 justify-center"><img src="{{ asset('/icon/icon-maphome.png') }}" alt="Home"></a>
             <a href="{{ route('heat.map') }}" class="hover:text-gray-300 flex flex-1 justify-center"><img src="{{ asset('/icon/icon-heatmap.png') }}" alt="Heatmap"></a>
             <a href="{{ route('clustering.map') }}" class="hover:text-gray-300 flex flex-1 justify-center"><img src="{{ asset('/icon/icon-cluster.png') }}" alt="Clustermap"></a>
-            <a href="" class="hover:text-gray-300 flex flex-1 justify-center"><img src="{{ asset('/icon/icon-grafico.png') }}" alt="Dashboard"></a>
+            <a href="{{ route('dashboard') }}" class="hover:text-gray-300 flex flex-1 justify-center"><img src="{{ asset('/icon/icon-grafico.png') }}" alt="Dashboard"></a>
         </nav>
     </div>
 </div>
