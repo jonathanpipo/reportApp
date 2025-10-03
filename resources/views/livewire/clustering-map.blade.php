@@ -1,10 +1,16 @@
-<div>
-    <h1>Clustermap</h1>
-    <div>
-        <div id="clusterMap" wire:ignore class="w-full h-64 rounded-md border mb-4">
-            <!-- O mapa Leaflet será renderizado aqui -->
-        </div>
+<div class="bg-gradient-to-b from-gray-100 to-gray-200 shadow-inner flex flex-col h-screen">
+    <div class="container mx-auto flex items-center justify-between py-4 px-4 ">
+        <h1 class="text-2xl font-semibold text-gray-800">Mapa de Agrupamento</h1>
+            <button 
+                @click="open = true" 
+                class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold focus:outline-none"
+                title="O que é um mapa de calor?"
+            >?
+            </button>
     </div>
+
+        <!-- Mapa de Cluster -->
+        <div id="clusterMap" wire:ignore class="flex-1 rounded-lg border border-gray-300 shadow-sm bg-white"></div>
 </div>
 
 <script>
