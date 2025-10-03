@@ -54,7 +54,7 @@
     @livewireStyles
 </head>
 
-<body class=" font-poppins overflow-x-hidden">
+<body class="font-poppins overflow-x-hidden h-screen">
     <livewire:header />
 
     {{ $slot }}
