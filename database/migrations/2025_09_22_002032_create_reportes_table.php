@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reportes', function (Blueprint $table) {
-            $table->id(); // cria o campo 'id' auto-increment
+            $table->id();
             $table->string('categoria', 100);
-            $table->string('subcategoria', 100);
+            $table->string('avaliacaoInfraestrutura', 100);
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
             $table->decimal('precisao', 10, 2)->nullable();
             $table->text('descricao')->nullable();
-
-            // Cria as colunas created_at e updated_at
-            $table->timestamps();
+            $table->boolean('ativo')->default(true);
+            $table->timestamp('data_expiracao')->nullable();
+            $table->timestamps(); // Cria as colunas created_at e updated_at
         });
     }
 
