@@ -30,47 +30,73 @@ const bounds = L.latLngBounds(
 map.setMaxBounds(bounds);
 map.options.maxBoundsViscosity = 1.0;
 
-//====== INFRAESTRUTURA ==========
-const reportesInfraestrutura = @json($clusterReportesInfraestrutura);
-const markersInfraestrutura = L.markerClusterGroup();
+//====== Asfalto danificado ==========
+const reportesAsfaltoDanificado = @json($clusterReportesAsfaltoDanificado);
+const markersAsfaltoDanificado = L.markerClusterGroup();
 
-reportesInfraestrutura.forEach(r => {
+reportesAsfaltoDanificado.forEach(r => {
     if (r.latitude && r.longitude) {
         const marker = L.marker([r.latitude, r.longitude])
             .bindPopup(`<b>Categoria:</b> ${r.categoria}`);
-        markersInfraestrutura.addLayer(marker);
+        markersAsfaltoDanificado.addLayer(marker);
     }
 });
 
-//====== SITUAÇÃO ==========
-const reportesSituacao = @json($clusterReportesSituacao);
-const markersSituacao = L.markerClusterGroup();
+//====== Sinalização deficiente ==========
+const reportesSinalizacaoDeficiente = @json($clusterReportesSinalizacaoDeficiente);
+const markersSinalizacaoDeficiente = L.markerClusterGroup();
 
-reportesSituacao.forEach(r => {
+reportesSinalizacaoDeficiente.forEach(r => {
     if (r.latitude && r.longitude) {
         const marker = L.marker([r.latitude, r.longitude])
             .bindPopup(`<b>Categoria:</b> ${r.categoria}`);
-        markersSituacao.addLayer(marker);
+        markersSinalizacaoDeficiente.addLayer(marker);
     }
 });
 
-//====== SINALIZAÇÃO ==========
-const reportesSinalizacao = @json($clusterReportesSinalizacao);
-const markersSinalizacao = L.markerClusterGroup();
+//====== Direção perigosa ==========
+const reportesDirecaoPerigosa = @json($clusterReportesDirecaoPerigosa);
+const markersDirecaoPerigosa = L.markerClusterGroup();
 
-reportesSinalizacao.forEach(r => {
+reportesDirecaoPerigosa.forEach(r => {
     if (r.latitude && r.longitude) {
         const marker = L.marker([r.latitude, r.longitude])
             .bindPopup(`<b>Categoria:</b> ${r.categoria}`);
-        markersSinalizacao.addLayer(marker);
+        markersDirecaoPerigosa.addLayer(marker);
+    }
+});
+
+//====== Congestionamento recorrente ==========
+const reportesCongestionamentoRecorrente = @json($clusterReporteCongestionamentoRecorrente);
+const markersCongestionamentoRecorrente = L.markerClusterGroup();
+
+reportesCongestionamentoRecorrente.forEach(r => {
+    if (r.latitude && r.longitude) {
+        const marker = L.marker([r.latitude, r.longitude])
+            .bindPopup(`<b>Categoria:</b> ${r.categoria}`);
+        markersCongestionamentoRecorrente.addLayer(marker);
+    }
+});
+
+//====== Drenagem de água ==========
+const reportesDrenagemAgua = @json($clusterReportesDrenagemAgua);
+const markersDrenagemAgua = L.markerClusterGroup();
+
+reportesDrenagemAgua.forEach(r => {
+    if (r.latitude && r.longitude) {
+        const marker = L.marker([r.latitude, r.longitude])
+            .bindPopup(`<b>Categoria:</b> ${r.categoria}`);
+        markersDrenagemAgua.addLayer(marker);
     }
 });
 
 // === adicionando controle de camadas ===
 const overlays = {
-    "Infraestrutura": markersInfraestrutura,
-    "Situação": markersSituacao,
-    "Sinalização": markersSinalizacao
+    "Asfalto danificado": markersAsfaltoDanificado,
+    "Sinalização deficiente": markersSinalizacaoDeficiente,
+    "Direção perigosa": markersDirecaoPerigosa,
+    "Congestionamento recorrente": markersCongestionamentoRecorrente,
+    "Drenagem de água": markersDrenagemAgua
 };
 
 L.control.layers(null, overlays, { collapsed: false }).addTo(map);

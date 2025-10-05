@@ -8,30 +8,43 @@ use App\Models\Reporte;
 class ClusteringMap extends Component
 {
 
-     public $clusterReportesInfraestrutura = [];
-     public $clusterReportesSinalizacao = [];
-     public $clusterReportesSituacao = [];
+     public $clusterReportesAsfaltoDanificado = [];
+     public $clusterReportesSinalizacaoDeficiente = [];
+     public $clusterReportesDirecaoPerigosa = [];
+     public $clusterReporteCongestionamentoRecorrente = [];
+     public $clusterReportesDrenagemAgua = [];
 
      public function mount()
     {
-        //infraestrutura
-        $this->clusterReportesInfraestrutura = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'infraestrutura')
+        //Asfalto danificado
+        $this->clusterReportesAsfaltoDanificado = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Asfalto danificado')
             ->get()
             ->toArray();
 
-        //situação
-        $this->clusterReportesSituacao = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'situação')
+        //Sinalização deficiente
+        $this->clusterReportesSinalizacaoDeficiente = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Sinalização deficiente')
             ->get()
             ->toArray();
 
-
-        //sinalização
-        $this->clusterReportesSinalizacao = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'sinalização')
+        //Direção perigosa
+        $this->clusterReportesDirecaoPerigosa = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Direção perigosa')
             ->get()
             ->toArray();
+
+        //Congestionamento recorrente
+        $this->clusterReporteCongestionamentoRecorrente = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Congestionamento recorrente')
+            ->get()
+            ->toArray();
+            
+        //Drenagem de água
+        $this->clusterReportesDrenagemAgua = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Drenagem de água')
+            ->get()
+            ->toArray();                        
 
     }
 
