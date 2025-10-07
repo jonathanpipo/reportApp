@@ -1,8 +1,7 @@
 <div class="grid h-screen grid-rows-[auto_13rem]">
     <!--CONTAINER ONDE O MAPA SERÁ RENDERIZADO-->
     <div id="map" wire:ignore class="w-full"></div>
-<form wire:submit.prevent="createReporte" 
-    class="w-full flex h-auto border border-gray-300 bg-white shadow-md">
+    <form wire:submit.prevent="createReporte" class="w-full flex h-auto border border-gray-300 bg-white shadow-md">
 
     <!--SELECTS-->
     <div class="w-2/3 flex flex-col gap-4 p-4">
@@ -13,11 +12,11 @@
             <select id="categoria" wire:model="categoria" 
                 class="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                 <option value="">Selecione uma opção</option>
-                <option value="Infraestrutura">Asfalto</option>
-                <option value="Sinalização">Sinalização</option>
-                <option value="Situação">Periculosidade</option>
-                <option value="Situação">Congestionamento</option>
-                <option value="Situação">Drenagem</option>
+                <option value="Asfalto danificad">Asfalto danificado</option>
+                <option value="Sinalização deficiente">Sinalização deficiente</option>
+                <option value="Direção perigosa">Direção perigosa</option>
+                <option value="Congestionamento recorrente">Congestionamento recorrente</option>
+                <option value="Drenagem de água">Drenagem de água</option>
             </select>
             @error('categoria') 
                 <span class="text-red-500 text-xs mt-1">{{ $message }}</span> 
@@ -25,10 +24,10 @@
         </div>
 
         <div class="flex flex-col">
-            <label for="subcategoria" class="text-base font-medium text-gray-700 mb-1">
+            <label for="avaliacaoInfraestrutura" class="text-base font-medium text-gray-700 mb-1">
                 Infraestrutura das vias
             </label>
-            <select id="subcategoria" wire:model="subcategoria" 
+            <select id="subcategoria" wire:model="avaliacaoInfraestrutura" 
                 class="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                 <option value="">Selecione uma opção</option>
                 <option value="tipo1">Muito ruim</option>

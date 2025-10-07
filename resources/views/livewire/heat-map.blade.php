@@ -1,22 +1,18 @@
 <div class="bg-gradient-to-b from-gray-100 to-gray-200 shadow-inner flex flex-col h-screen">
     <div class="container mx-auto flex items-center justify-between py-4 px-4">
-            <h1 class="text-2xl font-semibold text-gray-800">Mapa de Calor</h1>
-            <!-- Botão de ajuda -->
+        <h1 class="text-2xl font-semibold text-gray-800">Mapa de Calor</h1>
             <button 
                 @click="open = true" 
                 class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold focus:outline-none"
                 title="O que é um mapa de calor?"
-            >
-                ?
+            >?
             </button>
     </div>
 
-    <!-- Mapa -->
-    <div id="heatMap" wire:ignore class="flex-1 rounded-lg border border-gray-300 shadow-sm bg-white">
-        <!-- O mapa Leaflet será renderizado aqui -->
-    </div>
+    <!-- Mapa de Calor -->
+    <div id="heatMap" wire:ignore class="flex-1 rounded-lg border border-gray-300 shadow-sm bg-white"></div>
 
-    <!-- Modal explicativo -->
+    <!-- Modal explicativo 
     <div x-data="{ open: false }">
         <div 
             x-show="open" 
@@ -44,6 +40,7 @@
             </div>
         </div>
     </div>
+    -->
 </div>
 
 <script>

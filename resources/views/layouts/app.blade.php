@@ -38,6 +38,9 @@
     <!-- Geocoder CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
+    <!-- AlpineJS -->
+    <!--<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>-->
+
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -54,7 +57,7 @@
     @livewireStyles
 </head>
 
-<body class="font-poppins overflow-x-hidden h-screen">
+<body class="font-poppins overflow-x-hidden">
     <livewire:header />
 
     {{ $slot }}
