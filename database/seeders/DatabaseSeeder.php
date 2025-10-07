@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Reporte;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +14,7 @@ class DatabaseSeeder extends Seeder
  public function run(): void
     {
         $categorias = ['Asfalto danificado', 'Sinalização deficiente', 'Direção perigosa', 'Congestionamento recorrente', 'Drenagem de água'];
-        $avaliacoes = ['Muito ruim', 'Ruim', 'Baixa', 'Regular', 'Bom', 'Muito bom'];
+        $avaliacoes = ['Muito ruim', 'Ruim', 'Regular', 'Bom', 'Muito bom'];
 
         for ($i = 0; $i < 500; $i++) {
             Reporte::create([
