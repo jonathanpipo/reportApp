@@ -10,6 +10,7 @@
 - [ ]  Dashboard com gráficos dos dados
 - [ ]  Componente de coleta de localização do usuário no formulário
 - [ ]  Pop-ups informativos
+- [ ]  Alterar input único por select
 
 # DiskRua
 
