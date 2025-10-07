@@ -8,7 +8,7 @@ use App\Models\Reporte;
 class Home extends Component
 {
     public $categoria;
-    public $subcategoria;
+    public $avaliacaoInfraestrutura;
     public $latitude;
     public $longitude;
     public $precisao;
@@ -17,7 +17,7 @@ class Home extends Component
     // Regras de validação
     protected $rules = [
         'categoria'    => 'required|string|max:255',
-        'subcategoria' => 'nullable|string|max:255',
+        'avaliacaoInfraestrutura' => 'nullable|string|max:255',
         'latitude'     => 'required|numeric|between:-90,90',
         'longitude'    => 'required|numeric|between:-180,180',
         'precisao'     => 'nullable|numeric',
