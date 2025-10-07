@@ -12,7 +12,7 @@ class Reporte extends Model
 
     protected $fillable = [
         'categoria',
-        'subcategoria',
+        'avaliacaoInfraestrutura',
         'latitude',
         'longitude',
         'precisao',
