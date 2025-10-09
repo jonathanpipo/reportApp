@@ -7,13 +7,48 @@ use App\Models\Reporte;
 
 class HeatMap extends Component
 {
-
-    public $heatReportes = [];
+     public $heatReportesAsfaltoDanificado = [];
+     public $heatReportesSinalizacaoDeficiente = [];
+     public $heatReportesDirecaoPerigosa = [];
+     public $heatReporteCongestionamentoRecorrente = [];
+     public $heatReportesDrenagemAgua = [];
+     public $allHeatReportes = [];
 
     public function mount() {
 
-        $this->heatReportes = Reporte::all(['latitude', 'longitude'])->toArray();
-    }
+        //Todos os reportes
+        $this->allHeatReportes = Reporte::all(['latitude', 'longitude'])->toArray();
+        
+        //Asfalto danificado
+        $this->heatReportesAsfaltoDanificado = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Asfalto danificado')
+            ->get()
+            ->toArray();
+
+        //Sinalização deficiente
+        $this->heatReportesSinalizacaoDeficiente = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Sinalização deficiente')
+            ->get()
+            ->toArray();
+
+        //Direção perigosa
+        $this->heatReportesDirecaoPerigosa = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Direção perigosa')
+            ->get()
+            ->toArray();
+
+        //Congestionamento recorrente
+        $this->heatReporteCongestionamentoRecorrente = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Congestionamento recorrente')
+            ->get()
+            ->toArray();
+            
+        //Drenagem de água
+        $this->heatReportesDrenagemAgua = Reporte::select('categoria', 'latitude', 'longitude')
+            ->where('categoria', 'Drenagem de água')
+            ->get()
+            ->toArray();    
+        }
 
     public function render()
     {
