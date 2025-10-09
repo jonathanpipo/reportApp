@@ -8,20 +8,18 @@ use App\Models\Reporte;
 class Home extends Component
 {
     public $categoria;
-    public $avaliacaoInfraestrutura;
+    public $avaliacao = null;
     public $latitude;
     public $longitude;
-    public $precisao;
-    public $descricao;
+    public $comentario;
 
     // Regras de validação
     protected $rules = [
-        'categoria'    => 'required|string|max:255',
-        'avaliacaoInfraestrutura' => 'nullable|string|max:255',
+        'categoria'    => 'required|string|max:100',
+        'avaliacao'    => 'required|string|max:100',
         'latitude'     => 'required|numeric|between:-90,90',
         'longitude'    => 'required|numeric|between:-180,180',
-        'precisao'     => 'nullable|numeric',
-        'descricao'    => 'nullable|string',
+        'comentario'   => 'nullable|string|max:200',
     ];
 
     // Método para salvar os dados no banco

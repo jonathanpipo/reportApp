@@ -1,62 +1,94 @@
-<div class="grid h-screen grid-rows-[auto_13rem]">
-    <!--CONTAINER ONDE O MAPA SERÁ RENDERIZADO-->
-    <div id="map" wire:ignore class="w-full"></div>
-    <form wire:submit.prevent="createReporte" class="w-full flex h-auto border border-gray-300 bg-white shadow-md">
+<div class="grid h-screen grid-rows-[auto_auto]">
+    <!-- MAPA -->
+    <div id="map" wire:ignore class="w-full h-[60vh]"></div>
 
-    <!--SELECTS-->
-    <div class="w-2/3 flex flex-col gap-4 p-4">
-        <div class="flex flex-col">
-            <label for="categoria" class="text-base font-medium text-gray-700 mb-1">
-                Situação crítica
-            </label>
-            <select id="categoria" wire:model="categoria" 
-                class="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                <option value="">Selecione uma opção</option>
-                <option value="Asfalto danificad">Asfalto danificado</option>
-                <option value="Sinalização deficiente">Sinalização deficiente</option>
-                <option value="Direção perigosa">Direção perigosa</option>
-                <option value="Congestionamento recorrente">Congestionamento recorrente</option>
-                <option value="Drenagem de água">Drenagem de água</option>
-            </select>
-            @error('categoria') 
-                <span class="text-red-500 text-xs mt-1">{{ $message }}</span> 
-            @enderror
+    <!-- FORMULÁRIO -->
+    <form wire:submit.prevent="createReporte" class="w-full flex flex-col border border-gray-300 bg-white shadow-md rounded-b-2xl">
+
+        <!-- TEXTO INFORMATIVO -->
+        <div class="p-4 border-b border-gray-200 bg-gray-50">
+            <h2 class="text-lg font-semibold text-gray-800">
+                Preencha as informações para registrar sua denúncia
+            </h2>
+            <p class="text-sm text-gray-600 mt-1">
+                Informe sua avaliação geral sobre a qualidade da infraestrutura das ruas da cidade, descreva a situação no local selecionado no mapa acima e se necessário digite um comentário.
+            </p>
         </div>
 
-        <div class="flex flex-col">
-            <label for="avaliacaoInfraestrutura" class="text-base font-medium text-gray-700 mb-1">
-                Infraestrutura das vias
-            </label>
-            <select id="subcategoria" wire:model="avaliacaoInfraestrutura" 
-                class="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                <option value="">Selecione uma opção</option>
-                <option value="tipo1">Muito ruim</option>
-                <option value="tipo2">Ruim</option>
-                <option value="tipo3">Regular</option>
-                <option value="tipo4">Bom</option>
-                <option value="tipo5">Muito bom</option>
-            </select>
-            @error('subcategoria') 
-                <span class="text-red-500 text-xs mt-1">{{ $message }}</span> 
-            @enderror
+        <!-- CAMPOS -->
+        <div class="flex flex-col gap-4 p-4">
+
+            <!-- AVALIAÇÃO GERAL -->
+            <div class="flex flex-col">
+                <label for="avaliacao" class="text-base font-medium text-gray-700 mb-1">
+                    Avaliação geral das vias da cidade
+                </label>
+                <select id="avaliacao" wire:model="avaliacao" required
+                    class="w-full rounded-lg border border-gray-300 p-2.5 text-sm 
+                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                    <option value="" disabled>Selecione uma opção</option>
+                    <option value="Muito ruim">Muito ruim</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Muito bom">Muito bom</option>
+                </select>
+                @error('avaliacao')
+                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- OCORRÊNCIA -->
+            <div class="flex flex-col">
+                <label for="categoria" class="text-base font-medium text-gray-700 mb-1">
+                    Ocorrência do local selecionado
+                </label>
+                <select id="categoria" wire:model="categoria" required
+                    class="w-full rounded-lg border border-gray-300 p-2.5 text-sm 
+                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                    <option value="" disabled>Selecione uma opção</option>
+                    <option value="Asfalto danificado">Asfalto danificado</option>
+                    <option value="Sinalização deficiente">Sinalização deficiente</option>
+                    <option value="Direção perigosa">Direção perigosa</option>
+                    <option value="Congestionamento recorrente">Congestionamento recorrente</option>
+                    <option value="Drenagem de água">Drenagem de água</option>
+                </select>
+                @error('categoria')
+                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- COMENTÁRIO -->
+            <div class="flex flex-col">
+                <label for="comentario" class="text-base font-medium text-gray-700 mb-1">
+                    Comentário breve sobre o local selecionado
+                </label>
+                <textarea id="comentario" wire:model="comentario" maxlength="200"
+                    placeholder="Descreva brevemente o problema..."
+                    class="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition resize-none"></textarea>
+                <div class="text-right text-xs text-gray-500 mt-1">
+                    Máximo de 200 caracteres
+                </div>
+                @error('comentario')
+                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    <!--BOTÃO-->
-<div class="w-1/3 flex items-center justify-center p-4 bg-gray-50 rounded-r-2xl">
-    <button type="submit"
-        class="w-full h-full py-3 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
-               text-white text-lg font-bold rounded-lg shadow-md 
-               hover:from-blue-600 hover:to-blue-800 
-               focus:outline-none focus:ring-2 focus:ring-blue-400 
-               transition-all duration-200
-               drop-shadow-md">
-        Reportar
-    </button>
+        <!-- BOTÃO -->
+        <div class="p-4 border-t bg-gray-50 rounded-b-2xl">
+            <button type="submit"
+                class="w-full py-3 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
+                       text-white text-lg font-bold rounded-lg shadow-md 
+                       hover:from-blue-600 hover:to-blue-800 
+                       focus:outline-none focus:ring-2 focus:ring-blue-400 
+                       transition-all duration-200 drop-shadow-md">
+                Enviar denúncia
+            </button>
+        </div>
+    </form>
 </div>
-</form>
 
-</div>
 
 
 <script>
