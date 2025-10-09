@@ -5,7 +5,6 @@
     <!-- FORMULÁRIO -->
     <form wire:submit.prevent="createReporte" class="w-full flex flex-col border border-gray-300 bg-white shadow-md rounded-b-2xl">
 
-        <!-- TEXTO INFORMATIVO -->
         <div class="p-4 border-b border-gray-200 bg-gray-50">
             <h2 class="text-lg font-semibold text-gray-800">
                 Preencha as informações para registrar sua denúncia
@@ -18,7 +17,7 @@
         <!-- CAMPOS -->
         <div class="flex flex-col gap-4 p-4">
 
-            <!-- AVALIAÇÃO GERAL -->
+            <!-- AVALIAÇÃO -->
             <div class="flex flex-col">
                 <label for="avaliacao" class="text-base font-medium text-gray-700 mb-1">
                     Avaliação geral das vias da cidade
@@ -89,101 +88,76 @@
     </form>
 </div>
 
-
-
 <script>
-const map = L.map('map', {
-    attributionControl: false // remove o "Leaflet" e OSM
+const map = L.map('map', { 
+    attributionControl: false,
+    minZoom: 12,  // Zoom mínimo
+    maxZoom: 18   // Zoom máximo
 }).setView([-22.891, -48.445], 13);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '' // remove atribuição
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '' }).addTo(map);
+
+//Limites do mapa
+const bounds = L.latLngBounds(
+    [-23.00, -48.52],
+    [-22.82, -48.36]
+);
+map.setMaxBounds(bounds);
+map.options.maxBoundsViscosity = 1.0;
+
+//Marcador atual
+let currentMarker = null;
+
+//Função para add/att marcador
+function setMarker(latlng, popupText = null) {
+    if (currentMarker) map.removeLayer(currentMarker);
+
+    currentMarker = L.marker(latlng).addTo(map);
+    if (popupText) currentMarker.bindPopup(popupText).openPopup();
+
+    @this.set('latitude', latlng.lat);
+    @this.set('longitude', latlng.lng);
+}
+
+//Geocoder
+L.Control.geocoder({
+    defaultMarkGeocode: false,
+    geocoder: L.Control.Geocoder.nominatim({
+        geocodingQueryParams: {
+            countrycodes: 'br',
+            viewbox: "-48.52,-22.95,-48.36,-22.82",
+            bounded: 1
+        }
+    })
+}).on('markgeocode', function(e) {
+    setMarker(e.geocode.center, e.geocode.name);
+    map.setView(e.geocode.center, 15);
 }).addTo(map);
 
-    const bounds = L.latLngBounds(
-        [-22.95, -48.52],
-        [-22.82, -48.36]
-    );
+//Interação com o mapa
+map.on("click", function(e) {
+    setMarker(e.latlng);
+});
 
-    map.setMaxBounds(bounds);
-    map.options.maxBoundsViscosity = 1.0;
+//Controle de localização
+const locateControl = L.control({ position: 'topleft' });
+locateControl.onAdd = function() {
+    const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+    const button = L.DomUtil.create('a', '', container);
+    button.innerHTML = '📍';
+    button.href = '#';
+    button.title = "Minha localização";
 
-    let currentMarker = null;
-
-    // Geocoder
-    const geocoder = L.Control.geocoder({
-        defaultMarkGeocode: false,
-        geocoder: L.Control.Geocoder.nominatim({
-            geocodingQueryParams: {
-                countrycodes: 'br',
-                viewbox: "-48.52,-22.95,-48.36,-22.82",
-                bounded: 1
-            }
-        })
-    })
-    .on('markgeocode', function(e) {
-        if (currentMarker) map.removeLayer(currentMarker);
-
-        currentMarker = L.marker(e.geocode.center).addTo(map)
-            .bindPopup(e.geocode.name)
-            .openPopup();
-
-        map.setView(e.geocode.center, 15);
-
-        @this.set('latitude', e.geocode.center.lat);
-        @this.set('longitude', e.geocode.center.lng);
-    })
-    .addTo(map);
-
-    // Clique no mapa adiciona marcador
-    map.on("click", function(e) {
-        if (currentMarker) map.removeLayer(currentMarker);
-
-        currentMarker = L.marker(e.latlng).addTo(map);
-
-        @this.set('latitude', e.latlng.lat);
-        @this.set('longitude', e.latlng.lng);
+    L.DomEvent.on(button, 'click', function(e) {
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+        map.locate({ setView: true, maxZoom: 16 });
     });
 
-    // Botão nativo de "minha localização"
-    const locateControl = L.control({position: 'topleft'});
-    locateControl.onAdd = function(map) {
-        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+    return container;
+};
+locateControl.addTo(map);
 
-        const button = L.DomUtil.create('a', '', container);
-        button.innerHTML = '📍';
-        button.href = '#';
-        button.title = "Minha localização";
-
-        L.DomEvent.on(button, 'click', function(e) {
-            L.DomEvent.stopPropagation(e);
-            L.DomEvent.preventDefault(e);
-
-            map.locate({setView: true, maxZoom: 16});
-        });
-
-        return container;
-    };
-    locateControl.addTo(map);
-
-    // Quando localização encontrada
-    map.on('locationfound', function(e) {
-        if (currentMarker) map.removeLayer(currentMarker);
-
-        currentMarker = L.marker(e.latlng).addTo(map)
-            .bindPopup("Você está aqui!")
-            .openPopup();
-
-        @this.set('latitude', e.latlng.lat);
-        @this.set('longitude', e.latlng.lng);
-    });
-
-    // Se não conseguir localizar
-    map.on('locationerror', function(e) {
-        alert("Não foi possível obter sua localização.");
-    });
+map.on('locationfound', e => setMarker(e.latlng, "Você está aqui!"));
+map.on('locationerror', () => alert("Não foi possível obter sua localização."));
 </script>
-
-
-
-
