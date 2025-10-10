@@ -1,6 +1,6 @@
 <div class="bg-gradient-to-b from-gray-100 to-gray-200 shadow-inner flex flex-col h-screen">
     <div class="container mx-auto flex-col items-center justify-between py-4 px-4 ">
-        <h1 class="text-2xl font-semibold text-gray-800">Mapa de Agrupamento</h1>
+        <h1 class="text-2xl font-semibold text-gray-700">Mapa de Agrupamento</h1>
         <p class="text-sm text-gray-600 mt-1">
             Um mapa de agrupamento, ou mapa de cluster, é uma representação visual que organiza pontos de dados próximos 
             ou relacionados em grupos chamados clusters, com base em características comuns, como localização geográfica ou valores semelhantes.
@@ -8,7 +8,7 @@
     </div>
 
     <!-- Mapa de Cluster -->
-    <div id="clusterMap" wire:ignore class="flex-1 rounded-lg border border-gray-300 shadow-sm bg-white"></div>
+    <div id="clusterMap" wire:ignore class="flex-1 rounded-lg border-gray-300 shadow-sm bg-white"></div>
 </div>
 
 <script>

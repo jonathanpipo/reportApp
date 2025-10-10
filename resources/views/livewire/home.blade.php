@@ -1,9 +1,9 @@
-<div class="grid h-screen grid-rows-[auto_auto]">
+<div class="grid h-min-screen grid-rows-[auto_auto]">
     <!-- MAPA -->
     <div id="map" wire:ignore class="w-full h-[60vh]"></div>
 
     <!-- FORMULÁRIO -->
-    <form wire:submit.prevent="createReporte" class="w-full flex flex-col border border-gray-300 bg-white shadow-md rounded-b-2xl">
+    <form wire:submit.prevent="createReporte" class="w-full flex flex-col border border-gray-300 bg-white shadow-md">
 
         <div class="p-4 border-b border-gray-200 bg-gray-50">
             <h2 class="text-lg font-semibold text-gray-800">
@@ -75,7 +75,7 @@
         </div>
 
         <!-- BOTÃO -->
-        <div class="p-4 border-t bg-gray-50 rounded-b-2xl">
+        <div class="p-4 border-b border-gray-200 bg-gray-50 rounded-b-2xl">
             <button type="submit"
                 class="w-full py-3 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
                        text-white text-lg font-bold rounded-lg shadow-md 

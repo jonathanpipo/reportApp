@@ -1,6 +1,6 @@
 <div class="bg-gradient-to-b from-gray-100 to-gray-200 shadow-inner flex flex-col h-screen">
     <div class="container mx-auto flex-col items-center justify-between py-4 px-4">
-        <h1 class="text-2xl font-semibold text-gray-800">Mapa de Calor</h1>
+        <h1 class="text-2xl font-semibold text-gray-700">Mapa de Calor</h1>
         <p class="text-sm text-gray-600 mt-1">
             Um mapa de calor é uma representação visual de dados em que cores indicam a intensidade ou frequência de determinado fenômeno.
             Normalmente, cores quentes como vermelho e laranja representam áreas de maior concentração ou ocorrência, enquanto cores frias 
