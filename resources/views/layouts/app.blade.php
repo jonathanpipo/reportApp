@@ -61,6 +61,7 @@
     <livewire:header />
 
     {{ $slot }}
+    <livewire:footer />
     @livewireScripts
 </body>
 
