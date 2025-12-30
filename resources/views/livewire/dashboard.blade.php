@@ -86,7 +86,7 @@
                                 {{ $reporte->created_at->format('d/m/Y') }}
                             </td>
                             <td class="px-4 py-2 text-sm text-gray-700">
-                                {{ ucfirst($reporte->categoria) }}
+                                {{ ucfirst($reporte->categoria->descricao ?? 'Sem categoria') }}
                             </td>
                             <td class="px-4 py-2 text-sm text-gray-700">
                                 {{ $reporte->descricao ?? '—' }}

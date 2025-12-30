@@ -3,7 +3,8 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use \App\Models\Reporte;
+use App\Models\Reporte;
+use App\Models\Categoria;
 
 class Dashboard extends Component
 {
@@ -26,56 +27,75 @@ class Dashboard extends Component
         $this->carregarTodasCategoriasDenuncias();
     }
 
+    /**
+     * Carrega dados das avaliações (Muito bom, Bom, etc.)
+     */
     public function carregarDados()
     {
-        $avaliacoes = Reporte::select('avaliacaoInfraestrutura')
+        $avaliacoes = Reporte::select('avaliacao')
             ->where('ativo', true)
             ->get()
-            ->groupBy('avaliacaoInfraestrutura')
+            ->groupBy('avaliacao')
             ->map(fn($item) => $item->count());
 
         $this->labels = $avaliacoes->keys()->toArray();
         $this->data = $avaliacoes->values()->toArray();
     }
 
+    /**
+     * Carrega dados das categorias (agora usando relacionamento)
+     */
     public function carregarDadosCategoria()
     {
-        $categorias = Reporte::select('categoria')
+        $categorias = Reporte::with('categoria')
             ->where('ativo', true)
             ->get()
-            ->groupBy('categoria')
+            ->groupBy(fn($item) => $item->categoria->descricao ?? 'Sem categoria')
             ->map(fn($item) => $item->count());
 
         $this->labelsCategoria = $categorias->keys()->toArray();
         $this->dataCategoria = $categorias->values()->toArray();
     }
 
+    /**
+     * Carrega totais da escala Likert
+     */
     public function carregarTodasCategoriasAvaliacaoInfraestrutura()
     {
         $this->totaisAvaliacaoInfraestrutura = [
-            'Muito bom' => Reporte::where('avaliacaoInfraestrutura', 'Muito bom')->count(),
-            'Bom' => Reporte::where('avaliacaoInfraestrutura', 'Bom')->count(),
-            'Regular' => Reporte::where('avaliacaoInfraestrutura', 'Regular')->count(),
-            'Ruim' => Reporte::where('avaliacaoInfraestrutura', 'Ruim')->count(),
-            'Muito ruim' => Reporte::where('avaliacaoInfraestrutura', 'Muito ruim')->count(),
+            'Muito bom' => Reporte::where('avaliacao', 'Muito bom')->count(),
+            'Bom' => Reporte::where('avaliacao', 'Bom')->count(),
+            'Regular' => Reporte::where('avaliacao', 'Regular')->count(),
+            'Ruim' => Reporte::where('avaliacao', 'Ruim')->count(),
+            'Muito ruim' => Reporte::where('avaliacao', 'Muito ruim')->count(),
         ];
     }
 
+    /**
+     * Contagens por categoria
+     */
     public function carregarTodasCategoriasDenuncias()
     {
-        $this->totaisCategoriasDenuncias = [
-            'Asfalto danificado' => Reporte::where('categoria', 'Asfalto danificado')->count(),
-            'Sinalização deficiente' => Reporte::where('categoria', 'Sinalização deficiente')->count(),
-            'Direção perigosa' => Reporte::where('categoria', 'Direção perigosa')->count(),
-            'Congestionamento recorrente' => Reporte::where('categoria', 'Congestionamento recorrente')->count(),
-            'Drenagem de água' => Reporte::where('categoria', 'Drenagem de água')->count(),
+        $lista = [
+            'Asfalto danificado',
+            'Sinalização deficiente',
+            'Direção perigosa',
+            'Congestionamento recorrente',
+            'Drenagem de água',
         ];
+
+        foreach ($lista as $categoria) {
+            $this->totaisCategoriasDenuncias[$categoria] =
+                Reporte::whereHas('categoria', fn($q) => $q->where('descricao', $categoria))
+                    ->count();
+        }
     }
 
-    //Cálculo da opinião geral sobre a infraestrutura das vias da cidade
+    /**
+     * Cálculo da opinião geral
+     */
     public function calcularOpiniaoGeral()
     {
-        // Array com a atribuição de valores
         $valoresLikert = [
             'Muito ruim' => 1,
             'Ruim' => 2,
@@ -84,34 +104,28 @@ class Dashboard extends Component
             'Muito bom' => 5,
         ];
 
-        // Puxando todos os votos ativos
         $avaliacoes = Reporte::where('ativo', true)
-            ->pluck('avaliacaoInfraestrutura');
+            ->pluck('avaliacao');
 
-        // Se não houver avaliações, retorna null
         if ($avaliacoes->isEmpty()) {
             return null;
         }
 
-        // Transformando cada avaliação em valor numérico
         $notas = $avaliacoes->map(fn($avaliacao) => $valoresLikert[$avaliacao] ?? 0);
 
-        // Calculando a média
         $media = $notas->avg();
-
-        // Retornando a avaliação correspondente à média arredondada
         $mediaArredondada = round($media);
 
-        // Buscar a chave correspondente ao valor arredondado
-        $opiniaoGeral = array_search($mediaArredondada, $valoresLikert);
-
-        return $opiniaoGeral ?? 'Sem dados';
+        return array_search($mediaArredondada, $valoresLikert) ?: 'Sem dados';
     }
 
-    //Paginação da tabela
+    /**
+     * Renderização da página
+     */
     public function render()
     {
-        $reportes = Reporte::where('ativo', true)
+        $reportes = Reporte::with('categoria')
+            ->where('ativo', true)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -130,4 +144,3 @@ class Dashboard extends Component
         ]);
     }
 }
-

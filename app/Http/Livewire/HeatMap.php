@@ -7,48 +7,49 @@ use App\Models\Reporte;
 
 class HeatMap extends Component
 {
-     public $heatReportesAsfaltoDanificado = [];
-     public $heatReportesSinalizacaoDeficiente = [];
-     public $heatReportesDirecaoPerigosa = [];
-     public $heatReporteCongestionamentoRecorrente = [];
-     public $heatReportesDrenagemAgua = [];
-     public $allHeatReportes = [];
+    public $heatReportesAsfaltoDanificado = [];
+    public $heatReportesSinalizacaoDeficiente = [];
+    public $heatReportesDirecaoPerigosa = [];
+    public $heatReporteCongestionamentoRecorrente = [];
+    public $heatReportesDrenagemAgua = [];
+    public $allHeatReportes = [];
 
-    public function mount() {
-
-        //Todos os reportes
-        $this->allHeatReportes = Reporte::all(['latitude', 'longitude'])->toArray();
-        
-        //Asfalto danificado
-        $this->heatReportesAsfaltoDanificado = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Asfalto danificado')
+    public function mount()
+    {
+        // Todos os reportes (sem filtrar categoria)
+        $this->allHeatReportes = Reporte::select('latitude', 'longitude')
             ->get()
             ->toArray();
 
-        //Sinalização deficiente
-        $this->heatReportesSinalizacaoDeficiente = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Sinalização deficiente')
-            ->get()
-            ->toArray();
+        // Filtros individuais por nome de categoria
+        $this->heatReportesAsfaltoDanificado =
+            $this->getHeatByCategory('Asfalto danificado');
 
-        //Direção perigosa
-        $this->heatReportesDirecaoPerigosa = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Direção perigosa')
-            ->get()
-            ->toArray();
+        $this->heatReportesSinalizacaoDeficiente =
+            $this->getHeatByCategory('Sinalização deficiente');
 
-        //Congestionamento recorrente
-        $this->heatReporteCongestionamentoRecorrente = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Congestionamento recorrente')
+        $this->heatReportesDirecaoPerigosa =
+            $this->getHeatByCategory('Direção perigosa');
+
+        $this->heatReporteCongestionamentoRecorrente =
+            $this->getHeatByCategory('Congestionamento recorrente');
+
+        $this->heatReportesDrenagemAgua =
+            $this->getHeatByCategory('Drenagem de água');
+    }
+
+    /**
+     * Retorna latitude/longitude filtrados pelo nome da categoria
+     */
+    private function getHeatByCategory($nomeCategoria)
+    {
+        return Reporte::select('latitude', 'longitude')
+            ->whereHas('categoria', function ($query) use ($nomeCategoria) {
+                $query->where('descricao', $nomeCategoria);
+            })
             ->get()
             ->toArray();
-            
-        //Drenagem de água
-        $this->heatReportesDrenagemAgua = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Drenagem de água')
-            ->get()
-            ->toArray();    
-        }
+    }
 
     public function render()
     {
