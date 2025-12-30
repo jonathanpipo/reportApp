@@ -4,41 +4,46 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Reporte;
+use App\Models\Categoria;
 
 class Home extends Component
 {
-    public $categoria;
-    public $avaliacaoInfraestrutura;
+    public $categorias;
+    public $categoria_id;
+    public $avaliacao;
     public $latitude;
     public $longitude;
-    public $precisao;
-    public $descricao;
+    public $comentario;
 
-    // Regras de validação
     protected $rules = [
-        'categoria'    => 'required|string|max:255',
-        'avaliacaoInfraestrutura' => 'nullable|string|max:255',
+        'categoria_id' => 'required|integer|exists:categorias,id',
+        'avaliacao'    => 'required|string|max:100',
         'latitude'     => 'required|numeric|between:-90,90',
         'longitude'    => 'required|numeric|between:-180,180',
-        'precisao'     => 'nullable|numeric',
-        'descricao'    => 'nullable|string',
+        'comentario'   => 'nullable|string|max:200',
     ];
 
-    // Método para salvar os dados no banco
+    public function mount()
+    {
+        $this->categorias = Categoria::all();
+    }
+
     public function createReporte()
     {
-        // Valida os campos
         $dadosValidados = $this->validate();
 
-        // Salva no banco usando a model Reporte
         Reporte::create($dadosValidados);
 
-        // Mensagem de sucesso
-        session()->flash('success', 'Reporte cadastrado com sucesso!');
+        // Mensagem flash
+        session()->flash('success', 'Seu reporte foi enviado com sucesso!');
 
-        // Limpa os campos do formulário
-        $this->reset();
+        // Limpa campos
+        $this->reset(['categoria_id', 'avaliacao', 'latitude', 'longitude', 'comentario']);
+
+        // Dispara evento para subir o scroll
+        $this->dispatch('scroll-top');
     }
+
 
     public function render()
     {

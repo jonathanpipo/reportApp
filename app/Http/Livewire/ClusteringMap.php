@@ -7,45 +7,46 @@ use App\Models\Reporte;
 
 class ClusteringMap extends Component
 {
+    public $clusterReportesAsfaltoDanificado = [];
+    public $clusterReportesSinalizacaoDeficiente = [];
+    public $clusterReportesDirecaoPerigosa = [];
+    public $clusterReporteCongestionamentoRecorrente = [];
+    public $clusterReportesDrenagemAgua = [];
 
-     public $clusterReportesAsfaltoDanificado = [];
-     public $clusterReportesSinalizacaoDeficiente = [];
-     public $clusterReportesDirecaoPerigosa = [];
-     public $clusterReporteCongestionamentoRecorrente = [];
-     public $clusterReportesDrenagemAgua = [];
-
-     public function mount()
+    public function mount()
     {
-        //Asfalto danificado
-        $this->clusterReportesAsfaltoDanificado = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Asfalto danificado')
+        // Asfalto danificado
+        $this->clusterReportesAsfaltoDanificado =
+            $this->getClusterByCategory('Asfalto danificado');
+
+        // Sinalização deficiente
+        $this->clusterReportesSinalizacaoDeficiente =
+            $this->getClusterByCategory('Sinalização deficiente');
+
+        // Direção perigosa
+        $this->clusterReportesDirecaoPerigosa =
+            $this->getClusterByCategory('Direção perigosa');
+
+        // Congestionamento recorrente
+        $this->clusterReporteCongestionamentoRecorrente =
+            $this->getClusterByCategory('Congestionamento recorrente');
+
+        // Drenagem de água
+        $this->clusterReportesDrenagemAgua =
+            $this->getClusterByCategory('Drenagem de água');
+    }
+
+    /**
+     * Retorna latitude/longitude filtrados pela descrição da categoria
+     */
+    private function getClusterByCategory($nomeCategoria)
+    {
+        return Reporte::select('latitude', 'longitude')
+            ->whereHas('categoria', function ($query) use ($nomeCategoria) {
+                $query->where('descricao', $nomeCategoria);
+            })
             ->get()
             ->toArray();
-
-        //Sinalização deficiente
-        $this->clusterReportesSinalizacaoDeficiente = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Sinalização deficiente')
-            ->get()
-            ->toArray();
-
-        //Direção perigosa
-        $this->clusterReportesDirecaoPerigosa = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Direção perigosa')
-            ->get()
-            ->toArray();
-
-        //Congestionamento recorrente
-        $this->clusterReporteCongestionamentoRecorrente = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Congestionamento recorrente')
-            ->get()
-            ->toArray();
-            
-        //Drenagem de água
-        $this->clusterReportesDrenagemAgua = Reporte::select('categoria', 'latitude', 'longitude')
-            ->where('categoria', 'Drenagem de água')
-            ->get()
-            ->toArray();                        
-
     }
 
     public function render()
