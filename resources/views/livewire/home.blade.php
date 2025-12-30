@@ -42,17 +42,17 @@
                 <label for="categoria" class="text-base font-medium text-gray-700 mb-1">
                     Ocorrência do local selecionado
                 </label>
-                <select id="categoria" wire:model="categoria" required
-                    class="w-full rounded-lg border border-gray-300 p-2.5 text-sm 
-                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                <select id="categoria" wire:model="categoria_id" required
+                    class="w-full rounded-lg border border-gray-300 p-2.5 text-sm">
                     <option value="" disabled>Selecione uma opção</option>
-                    <option value="Asfalto danificado">Asfalto danificado</option>
-                    <option value="Sinalização deficiente">Sinalização deficiente</option>
-                    <option value="Direção perigosa">Direção perigosa</option>
-                    <option value="Congestionamento recorrente">Congestionamento recorrente</option>
-                    <option value="Drenagem de água">Drenagem de água</option>
+
+                    @foreach($categorias as $cat)
+                        <option value="{{ $cat->id }}">
+                            {{ $cat->descricao }}
+                        </option>
+                    @endforeach
                 </select>
-                @error('categoria')
+                @error('categoria_id')
                     <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
                 @enderror
             </div>
@@ -85,6 +85,14 @@
                 Enviar denúncia
             </button>
         </div>
+            @if (session('success'))
+            <div 
+                id="alert-sucesso"
+                class="w-full bg-green-600 text-white text-center py-3 font-semibold shadow-md animate-fade"
+            >
+                {{ session('success') }}
+            </div>
+            @endif
     </form>
 </div>
 
@@ -160,4 +168,6 @@ locateControl.addTo(map);
 
 map.on('locationfound', e => setMarker(e.latlng, "Você está aqui!"));
 map.on('locationerror', () => alert("Não foi possível obter sua localização."));
+
+
 </script>
