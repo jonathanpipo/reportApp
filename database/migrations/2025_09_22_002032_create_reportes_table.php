@@ -11,17 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
+
+        Schema::create('categorias', function (Blueprint $table) {
+            $table->id();
+            $table->string('descricao', 100);
+        });
+
         Schema::create('reportes', function (Blueprint $table) {
             $table->id();
-            $table->string('categoria', 100);
-            $table->string('avaliacaoInfraestrutura', 100);
+            $table->foreignId('categoria_id')->constrained('categorias')->onDelete('cascade');
+            $table->string('avaliacao', 100);
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->decimal('precisao', 10, 2)->nullable();
-            $table->text('descricao')->nullable();
+            $table->string('comentario', 200)->nullable();
             $table->boolean('ativo')->default(true);
             $table->timestamp('data_expiracao')->nullable();
-            $table->timestamps(); // Cria as colunas created_at e updated_at
+            $table->timestamps();
         });
     }
 
@@ -31,5 +36,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('reportes');
+        Schema::dropIfExists('categorias');
     }
 };
